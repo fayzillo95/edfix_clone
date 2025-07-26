@@ -2,6 +2,7 @@ import { diskStorage } from 'multer';
 import { existsSync, mkdirSync } from 'fs';
 import { extname, join } from 'path';
 import { UnsupportedMediaTypeException } from '@nestjs/common';
+import { getPathInFileType } from './filter.file.types';
 
 export const userImageStorage = {
   storage: diskStorage({
@@ -39,60 +40,22 @@ export const courseFileFields = [
 export const courseStorage =  {
       storage: diskStorage({
         destination: (req,file,cb) =>{
+          let filePath = "./uploads"
           if(file.fieldname === 'banner'){
-            cb(null,join(process.cwd(), "src", "core", "uploads", "banners"))
+            filePath = join(process.cwd(), "src", "core", "uploads", "banners")
           }else if(file.fieldname === "introVideo"){
-            cb(null,join(process.cwd(), "src", "core", "uploads", "intro_videos"))
+            filePath = join(process.cwd(), "src", "core", "uploads", "intro_videos")
           }
+          if(!existsSync(filePath)){
+            mkdirSync(filePath,{ recursive: true })
+          }
+          cb(null,filePath)
         },
         filename: (req, file, cb) => {
           cb(null, Date.now() + '-' + file.originalname);
         },
       }),
     }
-
-export const userApiBody = {
-  schema: {
-    type: 'object',
-    properties: {
-      fullName: { type: "string" },
-      email: { type: "string" },
-      password: { type: "string" },
-      image: {
-        type: 'string',
-        format: 'binary',
-      },
-    },
-  },
-};
-
-
-export const courseApiBody = {
-  schema: {
-    type: 'object',
-    properties: {
-      name: { type: 'string' },
-      about: { type: 'string' },
-      price: { type: 'number' },
-      categoryId: { type: 'string' },
-      mentorId: { type: 'string' },
-      published: { type: 'boolean' },
-      level : {
-        type : "string",
-        enum : ['BEGINNER','ADVANCED','UPPER_INTERMEDIATE','INTERMEDIATE','PRE_INTERMEDIATE',]
-      },
-      banner: {
-        type: 'string',
-        format: 'binary',
-      },
-      introVideo: {
-        type: 'string',
-        format: 'binary',
-      },
-    },
-  },
-};
-
 
 export const lessoVideoStorage = {
   storage: diskStorage({
@@ -152,53 +115,15 @@ export const lessonFileStorage = {
   },
 };
 
-export const lessonApiBody = {
-    schema: {
-      type: 'object',
-      properties: {
-        name          : {type :"string"},
-        about         : {type :"string"},
-        lessonModulId : {type :"string"},
-        video  : {
-          type : 'string',
-          format : "binary"
-        }
-      }
-    }
+export const homeworkFilesStorage = {
+    storage: diskStorage({
+      destination: (req, file, cb) => {
+        let filePath = getPathInFileType(file.originalname)
+        cb(null,filePath)
+      },
+      filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
+      },
+    })
   }
-
-export const lessonFileApiBody = {
-    schema : {
-      type : "object",
-      properties : {
-        note : {},
-        lessonId : {},
-        file : {
-          type : "string",
-          format : "binary"
-        }
-      }
-    }
-  }
-
-// @ApiBody({
-//   schema: {
-//     type: 'object',
-//     properties: {
-//       name: { type: 'string' },
-//       about: { type: 'string' },
-//       price: { type: 'number' },
-//       categoryId: { type: 'string' },
-//       mentorId: { type: 'string' },
-//       published: { type: 'boolean' },
-//       banner: {
-//         type: 'string',
-//         format: 'binary',
-//       },
-//       introVideo: {
-//         type: 'string',
-//         format: 'binary',
-//       },
-//     },
-//   },
-// })

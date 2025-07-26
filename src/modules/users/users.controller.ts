@@ -16,7 +16,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import {
-  userApiBody,
   userImageStorage,
 } from 'src/core/types/upload_types';
 
@@ -24,6 +23,7 @@ import {
 import { diskStorage } from 'multer';
 import { existsSync, mkdirSync } from 'fs';
 import { extname, join } from 'path';
+import { userApiBody } from 'src/core/types/api.body.types';
 
 
 
@@ -36,18 +36,11 @@ export class UsersController {
   @ApiBody(userApiBody)
   @UseInterceptors(FileInterceptor('image', userImageStorage))
   create(
-    @Body() createUserDto: CreateUserDto,
+    @Body() data: CreateUserDto,
     @UploadedFile() image?: Express.Multer.File,
   ) {
-    try {
-      if (image) {
-        return this.usersService.create(createUserDto, image.filename)
-      } else {
-        return this.usersService.create(createUserDto);
-      }
-    } catch (error) {
-      console.log(error)
-    }
+      return image ? this.usersService.create(data,image.filename) 
+      : this.usersService.create(data)
   }
 
   @Get()
@@ -63,10 +56,11 @@ export class UsersController {
   @Patch(':id')
   @UseInterceptors(FileInterceptor("image",userImageStorage))
   update(
-    @Param('id') id: string, @Body() updateUserDto: UpdateUserDto,
+    @Param('id') id: string, @Body() data: UpdateUserDto,
     @UploadedFile() image? : Express.Multer.File
   ) {
-    return this.usersService.update(id, updateUserDto);
+    return image ? this.usersService.update(id, data,image.filename) 
+      : this.usersService.update(id, data)
   }
 
   @Delete(':id')

@@ -4,7 +4,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { urlGenerator } from 'src/core/types/generator.types';
-import { checkExistsResurs, checAlreadykExistsResurs } from 'src/core/types/check.functions.types';
+import { checAlreadykExistsResurs } from 'src/core/types/check.functions.types';
 import { ModelsEnumInPrisma } from 'src/core/types/global.types';
 import { userFindOneEntity } from './entities/user.entity';
 
@@ -15,14 +15,14 @@ export class UsersService {
     private readonly config: ConfigService
   ) { }
 
-  async create(createUserDto: CreateUserDto, image?: string) {
-    console.log(createUserDto, image)
-    await checAlreadykExistsResurs(this.prisma, ModelsEnumInPrisma.USERS, "email", createUserDto.email)
+  async create(data: CreateUserDto, image?: string) {
+    console.log(data, image)
+    await checAlreadykExistsResurs(this.prisma, ModelsEnumInPrisma.USERS, "email", data.email)
     if (image) {
-      createUserDto['image'] = urlGenerator(this.config, "user_images", image)
+      data['image'] = urlGenerator(this.config, "user_images", image)
     }
     const newUser = await this.prisma.user.create({
-      data: createUserDto
+      data: data
     })
     return {
       message: 'This action adds a new user',
@@ -52,16 +52,16 @@ export class UsersService {
     };
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto, image?: string) {
+  async update(id: string, data: UpdateUserDto, image?: string) {
     await this.findOne(id)
-    if (updateUserDto.email) {
-      await checAlreadykExistsResurs(this.prisma, ModelsEnumInPrisma.USERS, "email", updateUserDto.email)
+    if (data.email) {
+      await checAlreadykExistsResurs(this.prisma, ModelsEnumInPrisma.USERS, "email", data.email)
     }
     if (image) {
-      updateUserDto['image'] = urlGenerator(this.config, "user_images", image)
-    }
+      data['image'] = urlGenerator(this.config, "user_images", image)
+    }data
     try {
-      const updatedUser = await this.prisma.user.update({ where: { id: id }, data: updateUserDto ,select : userFindOneEntity})
+      const updatedUser = await this.prisma.user.update({ where: { id: id }, data: data ,select : userFindOneEntity})
       return {
         message: `This action updates a #${id} user`,
         updatedUser

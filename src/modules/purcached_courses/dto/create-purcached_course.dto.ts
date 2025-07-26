@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger"
 import { IsEnum, IsNumber, IsUUID } from "class-validator"
-import { PaidVia } from "src/core/types/payments.types"
+import { PaidVia, PaidViaArr } from "src/core/types/enum.types"
 
 export class CreatePurcachedCourseDto {
     @ApiProperty({ example: "f1b4ebe3-a1fa-4ce0-ab99-aa644d9bc4db" })
@@ -14,7 +14,7 @@ export class CreatePurcachedCourseDto {
     @IsNumber()
     amount: number
 
-    @ApiProperty({enum : ["PAYME","CLICK","CASH"]})
-    @IsEnum(["PAYME","CLICK","CASH"])
+    @ApiProperty({enum : PaidViaArr})
+    @IsEnum(PaidViaArr)
     paidVia: PaidVia
 }

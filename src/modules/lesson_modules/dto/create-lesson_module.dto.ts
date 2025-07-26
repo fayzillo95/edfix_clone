@@ -8,7 +8,7 @@ export class CreateLessonModuleDto {
     @IsNotEmpty()
     name: string
     
-    @ApiProperty({example : "daed"})
+    @ApiProperty({example : "a3290f2b-7241-434d-91c4-6c866094fd32"})
     @IsUUID()
     courseId: string
     

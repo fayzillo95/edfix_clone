@@ -15,8 +15,9 @@ import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
-import { courseStorage, courseApiBody, courseFileFields } from 'src/core/types/upload_types';
+import { courseStorage, courseFileFields } from 'src/core/types/upload_types';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { courseApiBody } from 'src/core/types/api.body.types';
 
 
 @Controller('courses')
@@ -88,30 +89,3 @@ export class CoursesController {
     return this.coursesService.remove(id);
   }
 }
-/*
-{
-  "banner": [
-    {
-      "fieldname": "banner",
-      "originalname": "bot_image_.jpg",
-      "encoding": "7bit",
-      "mimetype": "image/jpeg",
-      "destination": "/home/fayzillo/Desktop/New Folder/imtihon/src/core/uploads/banners",
-      "filename": "1753516437137-bot_image_.jpg",
-      "path": "/home/fayzillo/Desktop/New Folder/imtihon/src/core/uploads/banners/1753516437137-bot_image_.jpg",
-      "size": 12311
-    }
-  ],
-  "introVideo": [
-    {
-      "fieldname": "introVideo",
-      "originalname": "resized_640x360.png",
-      "encoding": "7bit",
-      "mimetype": "image/png",
-      "destination": "/home/fayzillo/Desktop/New Folder/imtihon/src/core/uploads/intro_videos",
-      "filename": "1753516437144-resized_640x360.png",
-      "path": "/home/fayzillo/Desktop/New Folder/imtihon/src/core/uploads/intro_videos/1753516437144-resized_640x360.png",
-      "size": 148346
-    }
-  ]
-}*/

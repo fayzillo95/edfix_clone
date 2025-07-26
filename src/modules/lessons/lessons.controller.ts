@@ -14,7 +14,8 @@ import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { lessonApiBody, lessoVideoStorage } from 'src/core/types/upload_types';
+import { lessoVideoStorage } from 'src/core/types/upload_types';
+import { lessonApiBody } from 'src/core/types/api.body.types';
 
 @Controller('lessons')
 export class LessonsController {

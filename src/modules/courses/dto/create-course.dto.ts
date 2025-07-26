@@ -1,13 +1,9 @@
+import { CourseLevel } from "@prisma/client"
 import { Transform } from "class-transformer"
 import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
+import { CourseLevelArr } from "src/core/types/enum.types"
 
-export const enum CourseLevel {
-  BEGINNER = 'BEGINNER',
-  PRE_INTERMEDIATE = 'PRE_INTERMEDIATE',
-  INTERMEDIATE = 'INTERMEDIATE',
-  UPPER_INTERMEDIATE = 'UPPER_INTERMEDIATE',
-  ADVANCED = 'ADVANCED'
-}
+
 
 export class CreateCourseDto {
 
@@ -40,6 +36,7 @@ export class CreateCourseDto {
 
     @IsOptional()
     @Transform((e) => {
+        if(e.value === 'true') return true
         return e.value === 'false' ? false :
             typeof e.value === 'boolean' ? e.value : Boolean(e.value)
     })
@@ -48,6 +45,6 @@ export class CreateCourseDto {
 
 
     @IsString()
-    @IsEnum(['BEGINNER','ADVANCED','UPPER_INTERMEDIATE','INTERMEDIATE','PRE_INTERMEDIATE',])
+    @IsEnum(CourseLevelArr)
     level : CourseLevel
 }

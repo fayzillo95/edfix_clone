@@ -6,18 +6,31 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { HomeworksService } from './homeworks.service';
-import { CreateHomeworkDto } from './dto/create-homework.dto';
+// import { CreateHomeworkDto } from './dto/create-homework.dto';
 import { UpdateHomeworkDto } from './dto/update-homework.dto';
+import { ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { homeworkFilesStorage } from 'src/core/types/upload_types';
+import { homeworkFIleApiBody } from 'src/core/types/api.body.types';
 
 @Controller('homeworks')
 export class HomeworksController {
-  constructor(private readonly homeworksService: HomeworksService) {}
+  constructor(private readonly homeworksService: HomeworksService) { }
 
   @Post()
-  create(@Body() createHomeworkDto: CreateHomeworkDto) {
-    return this.homeworksService.create(createHomeworkDto);
+  @ApiConsumes("multipart/form-data")
+  @ApiBody(homeworkFIleApiBody)
+  @UseInterceptors(FilesInterceptor("files", 10, homeworkFilesStorage))
+  create(
+    // @Body() createHomeworkDto: CreateHomeworkDto
+    @UploadedFiles() files: Express.Multer.File[]
+  ) {
+    return files || "return"
+    // return this.homeworksService.create();
   }
 
   @Get()

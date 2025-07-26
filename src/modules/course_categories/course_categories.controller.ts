@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { CourseCategoriesService } from './course_categories.service';
 import { CreateCourseCategoryDto } from './dto/create-course_category.dto';
-import { UpdateCourseCategoryDto } from './dto/update-course_category.dto';
 
 @Controller('course-categories')
 export class CourseCategoriesController {
