@@ -17,31 +17,31 @@ export class AssignedCoursesController {
     private readonly assignedCoursesService: AssignedCoursesService,
   ) {}
 
-  @Post()
-  create(@Body() createAssignedCourseDto: CreateAssignedCourseDto) {
-    return this.assignedCoursesService.create(createAssignedCourseDto);
+  @Post("create-one")
+  create(@Body() data: CreateAssignedCourseDto) {
+    return this.assignedCoursesService.create(data);
   }
 
-  @Get()
+  @Get("getall")
   findAll() {
     return this.assignedCoursesService.findAll();
   }
 
-  @Get(':id')
+  @Get('get-one/:id')
   findOne(@Param('id') id: string) {
-    return this.assignedCoursesService.findOne(+id);
+    return this.assignedCoursesService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('update-one/:id')
   update(
     @Param('id') id: string,
-    @Body() updateAssignedCourseDto: UpdateAssignedCourseDto,
+    @Body() data: UpdateAssignedCourseDto,
   ) {
-    return this.assignedCoursesService.update(+id, updateAssignedCourseDto);
+    return this.assignedCoursesService.update(id, data);
   }
 
-  @Delete(':id')
+  @Delete('delete-one/:id')
   remove(@Param('id') id: string) {
-    return this.assignedCoursesService.remove(+id);
+    return this.assignedCoursesService.remove(id);
   }
 }

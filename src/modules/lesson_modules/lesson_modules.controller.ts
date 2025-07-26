@@ -15,31 +15,31 @@ import { UpdateLessonModuleDto } from './dto/update-lesson_module.dto';
 export class LessonModulesController {
   constructor(private readonly lessonModulesService: LessonModulesService) {}
 
-  @Post()
-  create(@Body() createLessonModuleDto: CreateLessonModuleDto) {
-    return this.lessonModulesService.create(createLessonModuleDto);
+  @Post("create")
+  create(@Body() data : CreateLessonModuleDto) {
+    return this.lessonModulesService.create(data);
   }
 
-  @Get()
+  @Get("getall")
   findAll() {
     return this.lessonModulesService.findAll();
   }
 
-  @Get(':id')
+  @Get('get-one/:id')
   findOne(@Param('id') id: string) {
-    return this.lessonModulesService.findOne(+id);
+    return this.lessonModulesService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('update-one/:id')
   update(
     @Param('id') id: string,
-    @Body() updateLessonModuleDto: UpdateLessonModuleDto,
+    @Body() data: UpdateLessonModuleDto,
   ) {
-    return this.lessonModulesService.update(+id, updateLessonModuleDto);
+    return this.lessonModulesService.update(id, data);
   }
 
-  @Delete(':id')
+  @Delete('delete-one/:id')
   remove(@Param('id') id: string) {
-    return this.lessonModulesService.remove(+id);
+    return this.lessonModulesService.remove(id);
   }
 }

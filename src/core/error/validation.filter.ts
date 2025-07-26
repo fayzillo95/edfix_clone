@@ -1,9 +1,9 @@
-import { BadRequestException, Catch, ArgumentsHost, ExceptionFilter } from '@nestjs/common';
+import { BadRequestException, Catch, ArgumentsHost, ExceptionFilter, NotFoundException, ConflictException } from '@nestjs/common';
 import * as fs from 'fs';
 
-@Catch(BadRequestException)
+@Catch(BadRequestException,NotFoundException,ConflictException)
 export class MulterValidationExceptionFilter implements ExceptionFilter {
-  catch(exception: BadRequestException, host: ArgumentsHost) {
+  catch(exception: BadRequestException | NotFoundException | ConflictException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest();
     const response = ctx.getResponse();
@@ -39,6 +39,13 @@ export class MulterValidationExceptionFilter implements ExceptionFilter {
       if(file.path){
         fs.unlink(file.path,(err) => {
           if(err) {
+            console.log(err)
+          }
+        })
+      }
+      if(file['video']){
+        fs.unlink(file['video'],(err) => {
+          if(err){
             console.log(err)
           }
         })

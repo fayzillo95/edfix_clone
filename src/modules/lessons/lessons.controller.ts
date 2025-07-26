@@ -6,37 +6,48 @@ import {
   Patch,
   Param,
   Delete,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { LessonsService } from './lessons.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
+import { ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { lessonApiBody, lessoVideoStorage } from 'src/core/types/upload_types';
 
 @Controller('lessons')
 export class LessonsController {
-  constructor(private readonly lessonsService: LessonsService) {}
+  constructor(private readonly lessonsService: LessonsService) { }
 
-  @Post()
-  create(@Body() createLessonDto: CreateLessonDto) {
-    return this.lessonsService.create(createLessonDto);
+  @Post("create-one")
+  @ApiConsumes("multipart/form-data")
+  @ApiBody(lessonApiBody)
+  @UseInterceptors(FileInterceptor("video",lessoVideoStorage))
+  create(
+    @Body() data: CreateLessonDto,
+    @UploadedFile() video : Express.Multer.File
+  ) {
+    return this.lessonsService.create(data,video.filename);
   }
 
-  @Get()
+  @Get("getall")
   findAll() {
     return this.lessonsService.findAll();
   }
 
-  @Get(':id')
+  @Get('get-one/:id')
   findOne(@Param('id') id: string) {
-    return this.lessonsService.findOne(+id);
+    return this.lessonsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLessonDto: UpdateLessonDto) {
-    return this.lessonsService.update(+id, updateLessonDto);
+  @Patch('update-oen/:id')
+  update(@Param('id') id: string, @Body() data: UpdateLessonDto) {
+    return this.lessonsService.update(id, data);
   }
 
-  @Delete(':id')
+  @Delete('delete-one/:id')
   remove(@Param('id') id: string) {
-    return this.lessonsService.remove(+id);
+    return this.lessonsService.remove(id);
   }
 }

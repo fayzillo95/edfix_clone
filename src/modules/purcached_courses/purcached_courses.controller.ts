@@ -17,31 +17,31 @@ export class PurcachedCoursesController {
     private readonly purcachedCoursesService: PurcachedCoursesService,
   ) {}
 
-  @Post()
-  create(@Body() createPurcachedCourseDto: CreatePurcachedCourseDto) {
-    return this.purcachedCoursesService.create(createPurcachedCourseDto);
+  @Post("create-one")
+  create(@Body() data: CreatePurcachedCourseDto) {
+    return this.purcachedCoursesService.create(data);
   }
 
-  @Get()
+  @Get("get-all")
   findAll() {
     return this.purcachedCoursesService.findAll();
   }
 
-  @Get(':id')
+  @Get('get-one/:id')
   findOne(@Param('id') id: string) {
-    return this.purcachedCoursesService.findOne(+id);
+    return this.purcachedCoursesService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('update-one/:id')
   update(
     @Param('id') id: string,
     @Body() updatePurcachedCourseDto: UpdatePurcachedCourseDto,
   ) {
-    return this.purcachedCoursesService.update(+id, updatePurcachedCourseDto);
+    return this.purcachedCoursesService.update(id, updatePurcachedCourseDto);
   }
 
-  @Delete(':id')
+  @Delete('delete-oen/:id')
   remove(@Param('id') id: string) {
-    return this.purcachedCoursesService.remove(+id);
+    return this.purcachedCoursesService.remove(id);
   }
 }

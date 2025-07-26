@@ -23,12 +23,12 @@ export async function checAlreadykExistsResurs(
     return null
   }
 }
-export async function checkExistsResurs(
+export async function checkExistsResurs<T>(
   prisma: PrismaService,
   modelName: ModelsEnumInPrisma,
   field: string,
   value: any
-) {
+):Promise<T> {
   if (prisma[modelName] && typeof prisma[modelName].findFirst === 'function') {
     try {
       // @ts-ignore
