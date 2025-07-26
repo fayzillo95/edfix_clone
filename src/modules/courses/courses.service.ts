@@ -6,6 +6,8 @@ import { PrismaService } from 'src/core/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { checAlreadykExistsResurs, checkExistsResurs } from 'src/core/types/check.functions.types';
 import { ModelsEnumInPrisma } from 'src/core/types/global.types';
+import { Course } from '@prisma/client';
+import { unlinkFile } from 'src/core/types/file.cotroller.typpes';
 
 @Injectable()
 export class CoursesService {
@@ -57,37 +59,64 @@ export class CoursesService {
   }
 
   async update(id: string, data: UpdateCourseDto, banner?: string | undefined, introVideo?: string | undefined) {
-    await checkExistsResurs(this.prisma, ModelsEnumInPrisma.COURSES, "id", id)
+    const course = await checkExistsResurs<Course>(this.prisma, ModelsEnumInPrisma.COURSES, "id", id)
+    const bannerUrl = course.banner
+    const introVideoUrl = course.introVideo
     try {
       if (banner) {
+        if (bannerUrl && typeof bannerUrl === "string") {
+          let fileName = bannerUrl.split("/").at(-1)
+          if (typeof fileName === "string") {
+            unlinkFile(fileName, ["src", "core", "uploads", "banners"])
+          }
+        }
         data['banner'] = urlGenerator(this.config, "banner", banner)
       }
       if (introVideo) {
-        data['introVideo'] = urlGenerator(this.config, "intro", introVideo)
+        if (introVideoUrl && typeof introVideoUrl === "string") {
+          let fileName = introVideoUrl.split("/").at(-1)
+          if (typeof fileName === "string") {
+            unlinkFile(fileName, ["src", "core", "uploads", "intro_videos"])
+          }
+          data['introVideo'] = urlGenerator(this.config, "intro", introVideo)
+        }
       }
-      return {
-        message: `This action updates a #${id} course`,
-        data: await this.prisma.course.update({
-          where: { id: id },
-          data: data
-        })
-      };
-    } catch (error) {
-      console.log(error)
-      throw new HttpException("Course update filed ", 500)
+        return {
+          message: `This action updates a #${id} course`,
+          data: await this.prisma.course.update({
+            where: { id: id },
+            data: data
+          })
+        };
+      } catch (error) {
+        console.log(error)
+        throw new HttpException("Course update filed ", 500)
+      }
     }
-  }
 
   async remove(id: string) {
-    await checkExistsResurs(this.prisma, ModelsEnumInPrisma.COURSES, "id", id)
-    try {
-      return {
-        message : `This action removes a #${id} course`,
-        data : await this.prisma.course.delete({where : {id : id}})
-      };
-    } catch (error) {
-      console.log(error)
-      throw new HttpException("Course update filed ", 500)
+      const course = await checkExistsResurs<Course>(this.prisma, ModelsEnumInPrisma.COURSES, "id", id)
+      const banner = course.banner
+      const introVideo = course.introVideo
+      if (banner && typeof banner === "string") {
+        let fileName = banner.split("/").at(-1)
+        if (typeof fileName === "string") {
+          unlinkFile(fileName, ["src", "core", "uploads", "banners"])
+        }
+      }
+      if (introVideo && typeof introVideo === "string") {
+        let fileName = introVideo.split("/").at(-1)
+        if (typeof fileName === "string") {
+          unlinkFile(fileName, ["src", "core", "uploads", "intro_videos"])
+        }
+      } try {
+        return {
+          message: `This action removes a #${id} course`,
+          data: await this.prisma.course.delete({ where: { id: id } })
+        };
+      } catch (error) {
+        console.log(error)
+        throw new HttpException("Course update filed ", 500)
+      }
     }
   }
-}
