@@ -7,5 +7,6 @@ async function bootstrap() {
   initGlobalApp(app)
   await app.listen(process.env.PORT ?? 15975);
   console.log(process.env.APP_BASE_URL + "/api-docs")
+  console.log("Action test")
 }
 bootstrap();
