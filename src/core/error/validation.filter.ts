@@ -21,7 +21,7 @@ export class MulterValidationExceptionFilter implements ExceptionFilter {
           })
         })
       } 
-      if(file['banner'] && Array.isArray(file['banner']) && file['banner'][0] && file['banner'][0].path){
+      if(file && file['banner'] && Array.isArray(file['banner']) && file['banner'][0] && file['banner'][0].path){
         const path = file['banner'][0].path
         fs.unlink(path,(err) =>{
           if(err){
@@ -29,7 +29,7 @@ export class MulterValidationExceptionFilter implements ExceptionFilter {
           }
         })
       }
-      if(file['introVideo'] && Array.isArray(file['introVideo']) && file['introVideo'][0] && file['introVideo'][0].path){
+      if(file && file['introVideo'] && Array.isArray(file['introVideo']) && file['introVideo'][0] && file['introVideo'][0].path){
         fs.unlink(file['introVideo'][0].path,(err) => {
           if(err) {
             console.log(err)
@@ -43,7 +43,7 @@ export class MulterValidationExceptionFilter implements ExceptionFilter {
           }
         })
       }
-      if(file['video'] && file['video'].path){
+      if(file && file['video'] && file['video'].path){
         fs.unlink(file['video'],(err) => {
           if(err){
             console.log(err)
