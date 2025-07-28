@@ -17,7 +17,7 @@ export class QuestionAnswersController {
     private readonly questionAnswersService: QuestionAnswersService,
   ) {}
 
-  @Post()
+  @Post("create")
   create(@Body() createQuestionAnswerDto: CreateQuestionAnswerDto) {
     return this.questionAnswersService.create(createQuestionAnswerDto);
   }

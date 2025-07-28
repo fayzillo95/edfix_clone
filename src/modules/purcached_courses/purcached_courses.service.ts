@@ -3,9 +3,9 @@ import { CreatePurcachedCourseDto } from './dto/create-purcached_course.dto';
 import { UpdatePurcachedCourseDto } from './dto/update-purcached_course.dto';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import { checkExistsResurs } from 'src/core/types/check.functions.types';
-import { purcachedCourseFindEntity } from 'src/core/types/payments.types';
-import { ModelsEnumInPrisma } from 'src/core/types/global.types';
+import { checkExistsResurs } from 'src/common/types/check.functions.types';
+import { purcachedCourseFindEntity } from 'src/common/types/payments.types';
+import { ModelsEnumInPrisma } from 'src/common/types/global.types';
 import { Course } from '@prisma/client';
 
 @Injectable()

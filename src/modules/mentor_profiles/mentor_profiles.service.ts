@@ -3,8 +3,8 @@ import { CreateMentorProfileDto } from './dto/create-mentor_profile.dto';
 import { UpdateMentorProfileDto } from './dto/update-mentor_profile.dto';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import { checAlreadykExistsResurs, checkExistsResurs } from 'src/core/types/check.functions.types';
-import { ModelsEnumInPrisma } from 'src/core/types/global.types';
+import { checAlreadykExistsResurs, checkExistsResurs } from 'src/common/types/check.functions.types';
+import { ModelsEnumInPrisma } from 'src/common/types/global.types';
 
 @Injectable()
 export class MentorProfilesService {

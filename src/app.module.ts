@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { CoreModule } from './core/core.module';
 import { UsersModule } from './modules/users/users.module';
 import { MentorProfilesModule } from './modules/mentor_profiles/mentor_profiles.module';
 import { CourseCategoriesModule } from './modules/course_categories/course_categories.module';
@@ -18,6 +17,9 @@ import { ExamsModule } from './modules/exams/exams.module';
 import { ExamResultsModule } from './modules/exam_results/exam_results.module';
 import { QuestionsModule } from './modules/questions/questions.module';
 import { QuestionAnswersModule } from './modules/question_answers/question_answers.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './global/guards/jwt.auth.guard';
+import { CoreModule } from './core/core.module';
 
 @Module({
   imports: [
@@ -35,11 +37,17 @@ import { QuestionAnswersModule } from './modules/question_answers/question_answe
     LessonFilesModule,
     LessonViewsModule,
     HomeworksModule,
-    // HomeworkSubmissionsModule,
-    // ExamsModule,
-    // ExamResultsModule,
-    // QuestionsModule,
-    // QuestionAnswersModule,
+    HomeworkSubmissionsModule,
+    ExamsModule,
+    ExamResultsModule,
+    QuestionsModule,
+    QuestionAnswersModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
 })
-export class AppModule {}
+export class AppModule { }

@@ -9,32 +9,31 @@ import {
   UseInterceptors,
   UploadedFile,
   UnsupportedMediaTypeException,
+  Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiExcludeEndpoint } from '@nestjs/swagger';
 import {
-  userImageStorage,
-} from 'src/core/types/upload_types';
+  fileStorages,
+} from 'src/common/types/upload_types';
+import { userApiBody } from 'src/common/types/api.body.types';
+import { UserData } from 'src/global/decorators/auth.decorators';
+import { JwtPayload } from 'src/common/types/jwt.typs';
 
 
-import { diskStorage } from 'multer';
-import { existsSync, mkdirSync } from 'fs';
-import { extname, join } from 'path';
-import { userApiBody } from 'src/core/types/api.body.types';
-
-
-
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
+  @ApiExcludeEndpoint()
   @Post("create")
   @ApiConsumes('multipart/form-data')
   @ApiBody(userApiBody)
-  @UseInterceptors(FileInterceptor('image', userImageStorage))
+  @UseInterceptors(FileInterceptor('image', fileStorages(["image"])))
   create(
     @Body() data: CreateUserDto,
     @UploadedFile() image?: Express.Multer.File,
@@ -43,8 +42,27 @@ export class UsersController {
       : this.usersService.create(data)
   }
 
-  @Get()
-  findAll() {
+  @Patch("updateimange/:id")
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema :{
+      type : "object",
+      properties : {
+        image : {type : "string",format : "binary"}
+      }
+    } 
+  })
+  @UseInterceptors(FileInterceptor("image",fileStorages(["image"])))
+  updateImage(
+    @UploadedFile() image : Express.Multer.File,
+    @Param("id") id :  string
+  ){
+    return this.usersService.updateImage(id,image.filename)
+  }
+
+  @Get("get-all")
+  findAll(@UserData() user : JwtPayload) {
+    console.log(user)
     return this.usersService.findAll();
   }
 
@@ -54,7 +72,7 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @UseInterceptors(FileInterceptor("image",userImageStorage))
+  @UseInterceptors(FileInterceptor("image",fileStorages(["image"])))
   update(
     @Param('id') id: string, @Body() data: UpdateUserDto,
     @UploadedFile() image? : Express.Multer.File

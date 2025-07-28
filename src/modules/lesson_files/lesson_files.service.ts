@@ -3,9 +3,9 @@ import { CreateLessonFileDto } from './dto/create-lesson_file.dto';
 import { UpdateLessonFileDto } from './dto/update-lesson_file.dto';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import { urlGenerator } from 'src/core/types/generator.types';
-import { checkExistsResurs } from 'src/core/types/check.functions.types';
-import { ModelsEnumInPrisma } from 'src/core/types/global.types';
+import { urlGenerator } from 'src/common/types/generator.types';
+import { checkExistsResurs } from 'src/common/types/check.functions.types';
+import { ModelsEnumInPrisma } from 'src/common/types/global.types';
 
 @Injectable()
 export class LessonFilesService {
@@ -18,7 +18,7 @@ export class LessonFilesService {
     await checkExistsResurs(this.prisma, ModelsEnumInPrisma.LESSONS, "id", data.lessonId)
     try {
       if (fileName) {
-        data['file'] = urlGenerator(this.config, "lesson-files", fileName)
+        data['file'] = urlGenerator(this.config, fileName)
       }
       return {
         message: 'This action adds a new lessonFile',
@@ -53,7 +53,7 @@ export class LessonFilesService {
     await checkExistsResurs(this.prisma, ModelsEnumInPrisma.LESSON_FILES, "id", id)
     try {
       if (fileName) {
-        data['file'] = urlGenerator(this.config, "lesson-files", fileName)
+        data['file'] = urlGenerator(this.config, fileName)
       }
       return {
         message: `This action updates a #${id} lessonFile`,

@@ -1,7 +1,8 @@
+import { BadRequestException } from "@nestjs/common"
 import { CourseLevel } from "@prisma/client"
 import { Transform } from "class-transformer"
 import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from "class-validator"
-import { CourseLevelArr } from "src/core/types/enum.types"
+import { CourseLevelArr } from "src/common/types/enum.types"
 
 
 

@@ -15,9 +15,9 @@ import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
-import { courseStorage, courseFileFields } from 'src/core/types/upload_types';
+import { courseFileFields, fileStorages } from 'src/common/types/upload_types';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { courseApiBody } from 'src/core/types/api.body.types';
+import { courseApiBody } from 'src/common/types/api.body.types';
 
 
 @Controller('courses')
@@ -27,7 +27,7 @@ export class CoursesController {
   @Post("create-one")
   @ApiConsumes("multipart/form-data")
   @ApiBody(courseApiBody)
-  @UseInterceptors(FileFieldsInterceptor(courseFileFields, courseStorage))
+  @UseInterceptors(FileFieldsInterceptor(courseFileFields, fileStorages(['image','video'])))
   createCourse(
     @Body() data: CreateCourseDto,
     @UploadedFiles() files: Express.Multer.File[]
@@ -61,7 +61,7 @@ export class CoursesController {
   @Patch('update-one/:id')
   @ApiConsumes("multipart/form-data")
   @ApiBody(courseApiBody)
-  @UseInterceptors(FileFieldsInterceptor(courseFileFields, courseStorage))
+  @UseInterceptors(FileFieldsInterceptor(courseFileFields, fileStorages(["images","video"])))
   update(
     @Param('id') id: string,
     @Body() updateCourseDto: UpdateCourseDto,

@@ -15,31 +15,31 @@ import { UpdateExamResultDto } from './dto/update-exam_result.dto';
 export class ExamResultsController {
   constructor(private readonly examResultsService: ExamResultsService) {}
 
-  @Post()
+  @Post("create")
   create(@Body() createExamResultDto: CreateExamResultDto) {
     return this.examResultsService.create(createExamResultDto);
   }
 
-  @Get()
+  @Get("get-all")
   findAll() {
     return this.examResultsService.findAll();
   }
 
-  @Get(':id')
+  @Get('get-one/:id')
   findOne(@Param('id') id: string) {
-    return this.examResultsService.findOne(+id);
+    return this.examResultsService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('update-one/:id')
   update(
     @Param('id') id: string,
     @Body() updateExamResultDto: UpdateExamResultDto,
   ) {
-    return this.examResultsService.update(+id, updateExamResultDto);
+    return this.examResultsService.update(id, updateExamResultDto);
   }
 
-  @Delete(':id')
+  @Delete('delte-ne/:id')
   remove(@Param('id') id: string) {
-    return this.examResultsService.remove(+id);
+    return this.examResultsService.remove(id);
   }
 }

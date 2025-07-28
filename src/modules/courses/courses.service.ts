@@ -1,13 +1,13 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
-import { urlGenerator } from 'src/core/types/generator.types';
+import { urlGenerator } from 'src/common/types/generator.types';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import { checAlreadykExistsResurs, checkExistsResurs } from 'src/core/types/check.functions.types';
-import { ModelsEnumInPrisma } from 'src/core/types/global.types';
+import { checAlreadykExistsResurs, checkExistsResurs } from 'src/common/types/check.functions.types';
+import { ModelsEnumInPrisma } from 'src/common/types/global.types';
 import { Course } from '@prisma/client';
-import { unlinkFile } from 'src/core/types/file.cotroller.typpes';
+import { unlinkFile } from 'src/common/types/file.cotroller.typpes';
 
 @Injectable()
 export class CoursesService {
@@ -20,10 +20,10 @@ export class CoursesService {
     await checkExistsResurs(this.prisma, ModelsEnumInPrisma.MENTOR_PROFILES, "id", data.mentorId)
     await checkExistsResurs(this.prisma, ModelsEnumInPrisma.COURSE_CATEGORIES, "id", data.categoryId)
     if (introVideo) {
-      data['introVideo'] = urlGenerator(this.config, "intro", introVideo)
+      data['introVideo'] = urlGenerator(this.config, introVideo)
     }
     if (banner) {
-      data['banner'] = urlGenerator(this.config, "banner", banner)
+      data['banner'] = urlGenerator(this.config, banner)
     }
     let result = {}
     try {
@@ -67,18 +67,18 @@ export class CoursesService {
         if (bannerUrl && typeof bannerUrl === "string") {
           let fileName = bannerUrl.split("/").at(-1)
           if (typeof fileName === "string") {
-            unlinkFile(fileName, ["src", "core", "uploads", "banners"])
+            unlinkFile(fileName)
           }
         }
-        data['banner'] = urlGenerator(this.config, "banner", banner)
+        data['banner'] = urlGenerator(this.config,banner)
       }
       if (introVideo) {
         if (introVideoUrl && typeof introVideoUrl === "string") {
           let fileName = introVideoUrl.split("/").at(-1)
           if (typeof fileName === "string") {
-            unlinkFile(fileName, ["src", "core", "uploads", "intro_videos"])
+            unlinkFile(fileName,)
           }
-          data['introVideo'] = urlGenerator(this.config, "intro", introVideo)
+          data['introVideo'] = urlGenerator(this.config, "intro")
         }
       }
         return {
@@ -101,13 +101,13 @@ export class CoursesService {
       if (banner && typeof banner === "string") {
         let fileName = banner.split("/").at(-1)
         if (typeof fileName === "string") {
-          unlinkFile(fileName, ["src", "core", "uploads", "banners"])
+          unlinkFile(fileName)
         }
       }
       if (introVideo && typeof introVideo === "string") {
         let fileName = introVideo.split("/").at(-1)
         if (typeof fileName === "string") {
-          unlinkFile(fileName, ["src", "core", "uploads", "intro_videos"])
+          unlinkFile(fileName)
         }
       } try {
         return {

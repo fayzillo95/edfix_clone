@@ -9,7 +9,7 @@ async function bootstrap() {
   await app.listen(process.env.PORT ?? 15975);
   console.log(process.env.APP_BASE_URL + "/api-docs")
   console.log("Action test")
-  checkMemoryAfterDeploy()
+  // checkMemoryAfterDeploy()
   console.log("Memory function tugadi ")
 }
 bootstrap();

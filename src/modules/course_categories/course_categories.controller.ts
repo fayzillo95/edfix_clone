@@ -16,22 +16,22 @@ export class CourseCategoriesController {
     private readonly courseCategoriesService: CourseCategoriesService,
   ) {}
 
-  @Post()
+  @Post("create")
   create(@Body() data: CreateCourseCategoryDto) {
     return this.courseCategoriesService.create(data);
   }
 
-  @Get()
+  @Get("get-all")
   findAll() {
     return this.courseCategoriesService.findAll();
   }
 
-  @Get(':id')
+  @Get('get-one/:id')
   findOne(@Param('id') id: string) {
     return this.courseCategoriesService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('update-one/:id')
   update(
     @Param('id') id: string,
     @Body() data: CreateCourseCategoryDto,
@@ -39,7 +39,7 @@ export class CourseCategoriesController {
     return this.courseCategoriesService.update(id, data);
   }
 
-  @Delete(':id')
+  @Delete('delete-one/:id')
   remove(@Param('id') id: string) {
     return this.courseCategoriesService.remove(id);
   }

@@ -6,40 +6,52 @@ import {
   Patch,
   Param,
   Delete,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
+import { ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { QuestionApiBody } from 'src/common/types/api.body.types';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { fileStorages } from 'src/common/types/upload_types';
 
 @Controller('questions')
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 
-  @Post()
-  create(@Body() createQuestionDto: CreateQuestionDto) {
-    return this.questionsService.create(createQuestionDto);
+  @Post("create")
+  @ApiConsumes("multipart/form-data")
+  @ApiBody(QuestionApiBody)
+  @UseInterceptors(FileInterceptor("files",fileStorages(["image","text","application","video"])))
+  create(
+    @Body() data: CreateQuestionDto,
+    @UploadedFiles() files : Express.Multer.File[]
+  ) {
+    return this.questionsService.create(data,files);
   }
 
-  @Get()
+  @Get("get-all")
   findAll() {
     return this.questionsService.findAll();
   }
 
-  @Get(':id')
+  @Get('get-one/:id')
   findOne(@Param('id') id: string) {
-    return this.questionsService.findOne(+id);
+    return this.questionsService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('update-one/:id')
   update(
     @Param('id') id: string,
-    @Body() updateQuestionDto: UpdateQuestionDto,
+    @Body() data: UpdateQuestionDto,
   ) {
-    return this.questionsService.update(+id, updateQuestionDto);
+    return this.questionsService.update(id, data);
   }
 
-  @Delete(':id')
+  @Delete('delete-one/:id')
   remove(@Param('id') id: string) {
-    return this.questionsService.remove(+id);
+    return this.questionsService.remove(id);
   }
 }

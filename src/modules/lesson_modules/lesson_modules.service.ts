@@ -2,8 +2,8 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { CreateLessonModuleDto } from './dto/create-lesson_module.dto';
 import { UpdateLessonModuleDto } from './dto/update-lesson_module.dto';
 import { PrismaService } from 'src/core/prisma/prisma.service';
-import { checkExistsResurs } from 'src/core/types/check.functions.types';
-import { ModelsEnumInPrisma } from 'src/core/types/global.types';
+import { checkExistsResurs } from 'src/common/types/check.functions.types';
+import { ModelsEnumInPrisma } from 'src/common/types/global.types';
 
 @Injectable()
 export class LessonModulesService {

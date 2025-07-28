@@ -3,9 +3,9 @@ import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import { urlGenerator } from 'src/core/types/generator.types';
-import { checAlreadykExistsResurs, checkExistsResurs } from 'src/core/types/check.functions.types';
-import { ModelsEnumInPrisma } from 'src/core/types/global.types';
+import { urlGenerator } from 'src/common/types/generator.types';
+import { checAlreadykExistsResurs, checkExistsResurs } from 'src/common/types/check.functions.types';
+import { ModelsEnumInPrisma } from 'src/common/types/global.types';
 
 @Injectable()
 export class LessonsService {
@@ -20,7 +20,7 @@ export class LessonsService {
     await checkExistsResurs(this.prisma, ModelsEnumInPrisma.LESSON_MODULES, "id", data.lessonModulId)
     try {
       if (video) {
-        data['video'] = urlGenerator(this.config, "lesson-video", video)
+        data['video'] = urlGenerator(this.config, video)
       }
 
       return {

@@ -14,8 +14,8 @@ import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { lessoVideoStorage } from 'src/core/types/upload_types';
-import { lessonApiBody } from 'src/core/types/api.body.types';
+import { fileStorages } from 'src/common/types/upload_types';
+import { lessonApiBody } from 'src/common/types/api.body.types';
 
 @Controller('lessons')
 export class LessonsController {
@@ -24,7 +24,7 @@ export class LessonsController {
   @Post("create-one")
   @ApiConsumes("multipart/form-data")
   @ApiBody(lessonApiBody)
-  @UseInterceptors(FileInterceptor("video",lessoVideoStorage))
+  @UseInterceptors(FileInterceptor("video",fileStorages(["application", "image", "video","text"])))
   create(
     @Body() data: CreateLessonDto,
     @UploadedFile() video : Express.Multer.File
