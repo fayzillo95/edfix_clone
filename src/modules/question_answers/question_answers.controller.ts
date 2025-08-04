@@ -6,10 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { QuestionAnswersService } from './question_answers.service';
 import { CreateQuestionAnswerDto } from './dto/create-question_answer.dto';
 import { UpdateQuestionAnswerDto } from './dto/update-question_answer.dto';
+import { ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { QuestionAnswerApiBody } from 'src/common/types/api.body.types';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { fileStorages } from 'src/common/types/upload_types';
 
 @Controller('question-answers')
 export class QuestionAnswersController {
@@ -18,8 +23,11 @@ export class QuestionAnswersController {
   ) {}
 
   @Post("create")
-  create(@Body() createQuestionAnswerDto: CreateQuestionAnswerDto) {
-    return this.questionAnswersService.create(createQuestionAnswerDto);
+  @ApiConsumes("multipart")
+  @ApiBody(QuestionAnswerApiBody)
+  @UseInterceptors(FileInterceptor("files",fileStorages(["image","application","video"])))
+  create(@Body() data: CreateQuestionAnswerDto) {
+    return this.questionAnswersService.create(data);
   }
 
   @Get()
@@ -29,19 +37,19 @@ export class QuestionAnswersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.questionAnswersService.findOne(+id);
+    return this.questionAnswersService.findOne(id);
   }
 
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateQuestionAnswerDto: UpdateQuestionAnswerDto,
+    @Body() data: UpdateQuestionAnswerDto,
   ) {
-    return this.questionAnswersService.update(+id, updateQuestionAnswerDto);
+    return this.questionAnswersService.update(id, data);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.questionAnswersService.remove(+id);
+    return this.questionAnswersService.remove(id);
   }
 }
