@@ -47,7 +47,7 @@ export function getPathInFileType(fileName: string) {
         filePath = join(process.cwd(), "core", "uploads", "axrchive")
     }
     if (!existsSync(filePath)) {
-        mkdirSync(filePath)
+        mkdirSync(filePath,{recursive :true})
     }
     return filePath
 }
