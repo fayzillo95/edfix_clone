@@ -20,7 +20,7 @@ import {
   fileStorages,
 } from 'src/common/types/upload_types';
 import { userApiBody } from 'src/common/types/api.body.types';
-import { UserData } from 'src/global/decorators/auth.decorators';
+import { Public, UserData } from 'src/global/decorators/auth.decorators';
 import { JwtPayload } from 'src/common/types/jwt.typs';
 
 
@@ -60,6 +60,7 @@ export class UsersController {
     return this.usersService.updateImage(id,image.filename)
   }
 
+  @Public()
   @Get("get-all")
   findAll(@UserData() user : JwtPayload) {
     console.log(user)
