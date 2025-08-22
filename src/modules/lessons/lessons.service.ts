@@ -45,10 +45,10 @@ export class LessonsService {
     }
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     return {
       message: `This action returns a #${id} lesson`,
-      data: checkExistsResurs(this.prisma, ModelsEnumInPrisma.LESSONS, "id", id)
+      data: await checkExistsResurs(this.prisma, ModelsEnumInPrisma.LESSONS, "id", id)
     };
   }
 
