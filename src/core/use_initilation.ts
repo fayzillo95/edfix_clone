@@ -37,11 +37,13 @@ export const initGlobalApp = (app: INestApplication) => {
           "http://localhost:5173",
           "https://safira.uz",
         ];
-        if (!origin || allowedOrigins.includes(origin)) {
-          callback(null, true);
-        } else {
-          callback(new Error("Not allowed by CORS"), false);
-        }
+        console.log(orogin)  
+        callback(null,true);  
+        // if (!origin || allowedOrigins.includes(origin)) {
+        //   callback(null, true);
+        // } else {
+        //   callback(new Error("Not allowed by CORS"), false);
+        // }
       },
       credentials: true,
   })
