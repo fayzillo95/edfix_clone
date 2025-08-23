@@ -37,7 +37,7 @@ export const initGlobalApp = (app: INestApplication) => {
           "http://localhost:5173",
           "https://safira.uz",
         ];
-        console.log(orogin)  
+        console.log(origin)  
         callback(null,true);  
         // if (!origin || allowedOrigins.includes(origin)) {
         //   callback(null, true);
