@@ -30,5 +30,19 @@ export const initGlobalApp = (app: INestApplication) => {
 
     app.use(new DeviceMiddleware().use)
     app.useGlobalFilters(new MulterValidationExceptionFilter())
-    app.enableCors()
+  
+    app.enableCors({
+      origin: (origin, callback) => {
+        const allowedOrigins = [
+          "http://localhost:5173",
+          "https://safira.uz",
+        ];
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"), false);
+        }
+      },
+      credentials: true,
+  })
 }
