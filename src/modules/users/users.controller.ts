@@ -73,7 +73,6 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  @Public()
   @Get("get-my")
   getMy(@UserData() user : JwtPayload) {
     console.log(user)
