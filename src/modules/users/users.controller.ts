@@ -67,9 +67,17 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
+
+  @Get('get-byid/:id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
+  }
+
+  @Public()
+  @Get("get-my")
+  getMy(@UserData() user : JwtPayload) {
+    console.log(user)
+    return this.usersService.findOne(user.id)
   }
 
   @Patch(':id')
