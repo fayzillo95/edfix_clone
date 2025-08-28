@@ -90,8 +90,9 @@ export class UsersService {
     }
     if (data.password) {
       const hashedPass = await bcrypt.hashSync(data.password, parseInt(this.config.get<string>("BCRYPT_SALT_ROUNDS") || "10"))
-      data.password = hashedPass || data.password
+      data.password = hashedPass
     }
+    
     if (image) {
       data['image'] = urlGenerator(this.config, image)
       if (oldUser.image) {
@@ -100,7 +101,8 @@ export class UsersService {
           unlinkFile(filename || "")
         }
       }
-    } data
+    }
+
     try {
       const updatedUser = await this.prisma.user.update({ where: { id: id }, data: data, select: userFindOneEntity })
       return {

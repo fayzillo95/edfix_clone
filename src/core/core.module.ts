@@ -6,6 +6,7 @@ import { EmailModule } from './email/email.module';
 import { AuthModule } from './auth/auth.module';
 import { FileStreamerController } from './services/file.stream.controller';
 import { FileStreamService } from './services/file.stream.service';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { FileStreamService } from './services/file.stream.service';
     PrismaModule,
     JwtSubModule,
     EmailModule,
-    AuthModule
+    AuthModule,
+    AdminModule,
   ],
   controllers : [FileStreamerController],
   providers : [FileStreamService]

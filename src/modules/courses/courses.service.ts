@@ -8,7 +8,7 @@ import { checAlreadykExistsResurs, checkExistsResurs } from 'src/common/types/ch
 import { ModelsEnumInPrisma } from 'src/common/types/global.types';
 import { Course } from '@prisma/client';
 import { unlinkFile } from 'src/common/types/file.cotroller.typpes';
-
+import { userFindOneEntity } from '../users/entities/user.entity';
 @Injectable()
 export class CoursesService {
   constructor(
@@ -39,7 +39,11 @@ export class CoursesService {
 
   async findAll() {
     try {
-      const courses = await this.prisma.course.findMany()
+      const courses = await this.prisma.course.findMany({
+        include : {mentor : {
+          include : {user : {select : userFindOneEntity}}
+        },category : true}
+      })
       return {
         message: `This action returns all courses`,
         data: courses

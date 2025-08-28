@@ -69,6 +69,7 @@ export const courseApiBody = {
       name: { type: 'string' },
       about: { type: 'string' },
       price: { type: 'number' },
+      discount : { type: 'number' },
       categoryId: { type: 'string' },
       mentorId: { type: 'string' },
       published: { type: 'boolean' },

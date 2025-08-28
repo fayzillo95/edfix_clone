@@ -22,10 +22,11 @@ export class EmailService {
     }
 
     async sendResedPasswordVerify(email: string, code: number, typeMessage : EmailCodeEnum) {
+
         const result = await this.email.sendMail({
             to: email,
-            from: "Auth Service : '<fayzillofn30@gmail.com>'",
-            subject: 'Auth Service : "<fayzillofn30@gmail.com>"',
+            from: "Verfication Service : '<fayzillofn30@gmail.com>'",
+            subject: 'Verfication Service : "<fayzillofn30@gmail.com>"',
             text: 'Salom sizning tasdiq kodingiz',
             html: messageGenerator(typeMessage,code),
         });

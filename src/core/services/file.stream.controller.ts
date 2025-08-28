@@ -7,7 +7,10 @@ import {
 import { Response } from 'express';
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
 import { FileStreamService } from './file.stream.service';
+import { Public } from 'src/global/decorators/auth.decorators';
 
+
+@Public()
 @Controller()
 export class FileStreamerController {
 

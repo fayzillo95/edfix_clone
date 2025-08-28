@@ -5,6 +5,7 @@ import { PrismaService } from 'src/core/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { checAlreadykExistsResurs, checkExistsResurs } from 'src/common/types/check.functions.types';
 import { ModelsEnumInPrisma } from 'src/common/types/global.types';
+import { userFindOneEntity } from '../users/entities/user.entity';
 
 @Injectable()
 export class MentorProfilesService {
@@ -18,7 +19,10 @@ export class MentorProfilesService {
     await checAlreadykExistsResurs(this.prisma,ModelsEnumInPrisma.MENTOR_PROFILES,"userId",data.userId)
     await checkExistsResurs(this.prisma,ModelsEnumInPrisma.USERS,"id",data.userId)
     const newMentorProfile = await this.prisma.mentorProfile.create({
-      data : {...data}
+      data : {...data},
+      include : {
+        user : {select : userFindOneEntity}
+      }
     })  
     return {
       message : 'This action adds a new mentorProfile',
@@ -27,7 +31,9 @@ export class MentorProfilesService {
   }
 
   async findAll() {
-    const mentorProfiles = await this.prisma.mentorProfile.findMany()
+    const mentorProfiles = await this.prisma.mentorProfile.findMany({
+      include : {user : {select : userFindOneEntity}}
+    })
     return {
       message  : `This action returns all mentorProfiles`,
       data : mentorProfiles
@@ -35,9 +41,11 @@ export class MentorProfilesService {
   }
 
   async findOne(id: string) {
+    await checkExistsResurs(this.prisma,ModelsEnumInPrisma.MENTOR_PROFILES,"id",id)
+    const result = await this.prisma.mentorProfile.findMany({include : {user : {select : userFindOneEntity}}})
     return {
       message : `This action returns a #${id} mentorProfile`,
-      data : await checkExistsResurs(this.prisma,ModelsEnumInPrisma.MENTOR_PROFILES,"id",id)
+      data : result
     };
   }
 
@@ -46,7 +54,8 @@ export class MentorProfilesService {
     try {
       const result =  await this.prisma.mentorProfile.update({
         where : {id:id},
-        data : updateMentorProfileDto
+        data : updateMentorProfileDto,
+        include : {user : {select : userFindOneEntity}}
       })
       return {
         message : `This action updates a #${id} mentorProfile`,
@@ -61,7 +70,7 @@ export class MentorProfilesService {
   async remove(id: string) {
     await checkExistsResurs(this.prisma,ModelsEnumInPrisma.MENTOR_PROFILES,"id",id)
     try {
-      const deleted = await this.prisma.mentorProfile.delete({where : {id : id }})
+      const deleted = await this.prisma.mentorProfile.delete({where : {id : id },include : {user : {select : userFindOneEntity}}})
       return {
         message : `This action removes a #${id} mentorProfile`,
         data : deleted

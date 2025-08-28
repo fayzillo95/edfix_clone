@@ -32,19 +32,19 @@ export function homeworkFilesUrlGeneretor(fileName: string) {
 export function getPathInFileType(fileName: string) {
     console.log(fileName)
     const extract = extname(fileName).toLowerCase()
-    let filePath = join(process.cwd(), "core", "uploads", "unknown")
+    let filePath = join(process.cwd(), "..","core", "uploads", "unknown")
 
     if (imageExtensions.includes(extract)) {
-        filePath = join(process.cwd(), "core", "uploads", "images")
+        filePath = join(process.cwd(), "..","core", "uploads", "images")
     }
     if (videoExtensions.includes(extract)) {
-        filePath = join(process.cwd(), "core", "uploads", "videos")
+        filePath = join(process.cwd(), "..","core", "uploads", "videos")
     }
     if (documentExtensions.includes(extract)) {
-        filePath = join(process.cwd(), "core", "uploads", "docs")
+        filePath = join(process.cwd(), "..","core", "uploads", "docs")
     }
     if (archiveExtensions.includes(extract)) {
-        filePath = join(process.cwd(), "core", "uploads", "axrchive")
+        filePath = join(process.cwd(), "..","core", "uploads", "axrchive")
     }
     if (!existsSync(filePath)) {
         mkdirSync(filePath,{recursive :true})

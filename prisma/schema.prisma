@@ -69,6 +69,7 @@ model User {
   Permission         Permission[]
   updatedAt          DateTime             @default(now())
   createdAt          DateTime             @default(now())
+
   @@map("users")
 }
 
@@ -77,9 +78,10 @@ model Permission {
   model     String
   actions   Action[]
   userId    String
-  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   updatedAt DateTime @default(now())
   createdAt DateTime @default(now())
+
   @@map("permissions")
 }
 
@@ -95,10 +97,11 @@ model MentorProfile {
   github     String?
   website    String?
   userId     String   @unique
-  user       User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   courses    Course[]
   updatedAt  DateTime @default(now())
   createdAt  DateTime @default(now())
+
   @@map("mentor_profiles")
 }
 
@@ -108,6 +111,7 @@ model CourseCategory {
   courses   Course[]
   updatedAt DateTime @default(now())
   createdAt DateTime @default(now())
+
   @@map("course_categories")
 }
 
@@ -116,47 +120,51 @@ model Course {
   name            String
   about           String
   price           Float?
+  discount        Int?
   banner          String?
   introVideo      String?
   level           CourseLevel
-  published       Boolean?         @default(false)
+  published       Boolean?          @default(false)
   categoryId      String
-  category        CourseCategory    @relation(fields: [categoryId], references: [id],onDelete: Cascade)
+  category        CourseCategory    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   mentorId        String
-  mentor          MentorProfile     @relation(fields: [mentorId], references: [id],onDelete: Cascade)
+  mentor          MentorProfile     @relation(fields: [mentorId], references: [id], onDelete: Cascade)
   assignedCourses AssignedCourse[]
   PurcachedCourse PurcachedCourse[]
   Rating          Rating[]
   LastActivity    LastActivity[]
   LessonModul     LessonModul[]
   Question        Question[]
-  updatedAt       DateTime?          @default(now())
-  createdAt       DateTime?          @default(now())
+  updatedAt       DateTime?         @default(now())
+  createdAt       DateTime?         @default(now())
+
   @@map("courses")
 }
 
 model AssignedCourse {
   id        String   @id @default(uuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   courseId  String
-  courses   Course   @relation(fields: [courseId], references: [id],onDelete: Cascade)
+  courses   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   updatedAt DateTime @default(now())
   createdAt DateTime @default(now())
+
   @@map("assigned_courses")
 }
 
 model PurcachedCourse {
   id          String   @id @default(uuid())
   userId      String
-  user        User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   courseId    String
-  courses     Course   @relation(fields: [courseId], references: [id],onDelete: Cascade)
+  courses     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   amount      Float
   paidVia     PaidVia
   purcachedAt DateTime @default(now())
   updatedAt   DateTime @default(now())
   createdAt   DateTime @default(now())
+
   @@map("purcached_courses")
 }
 
@@ -164,27 +172,29 @@ model Rating {
   id        String   @id @default(uuid())
   comment   String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   courseId  String
-  courses   Course   @relation(fields: [courseId], references: [id],onDelete: Cascade)
+  courses   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   updatedAt DateTime @default(now())
   createdAt DateTime @default(now())
+
   @@map("rating")
 }
 
 model LastActivity {
   id            String      @id @default(uuid())
   userId        String
-  user          User        @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   courseId      String
-  courses       Course      @relation(fields: [courseId], references: [id],onDelete: Cascade)
+  courses       Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessonModulId String
-  lessonModule  LessonModul @relation(fields: [lessonModulId], references: [id],onDelete: Cascade)
+  lessonModule  LessonModul @relation(fields: [lessonModulId], references: [id], onDelete: Cascade)
   lessonId      String
-  lesson        Lesson      @relation(fields: [lessonId], references: [id],onDelete: Cascade)
+  lesson        Lesson      @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   url           String
   updatedAt     DateTime    @default(now())
   createdAt     DateTime    @default(now())
+
   @@map("last_activity")
 }
 
@@ -192,13 +202,14 @@ model LessonModul {
   id           String         @id @default(uuid())
   name         String
   courseId     String
-  Course       Course         @relation(fields: [courseId], references: [id],onDelete: Cascade)
+  Course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
   Lesson       Lesson[]
   Exam         Exam[]
   ExamResult   ExamResult[]
   LastActivity LastActivity[]
   updatedAt    DateTime       @default(now())
   createdAt    DateTime       @default(now())
+
   @@map("lesson_modules")
 }
 
@@ -208,48 +219,52 @@ model Lesson {
   about         String?
   video         String?
   lessonModulId String
-  module        LessonModul    @relation(fields: [lessonModulId], references: [id],onDelete: Cascade)
+  module        LessonModul    @relation(fields: [lessonModulId], references: [id], onDelete: Cascade)
   LessonView    LessonView[]
   Homework      Homework[]
   LastActivity  LastActivity[]
   LessonFile    LessonFile[]
   updatedAt     DateTime       @default(now())
   createdAt     DateTime       @default(now())
+
   @@map("lessons")
 }
+
 model LessonFile {
   id        String   @id @default(uuid())
   file      String?
   note      String
   lessonId  String
-  lesson    Lesson   @relation(fields: [lessonId], references: [id],onDelete: Cascade)
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   updatedAt DateTime @default(now())
   createdAt DateTime @default(now())
+
   @@map("lesson_files")
 }
 
 model LessonView {
   id        String   @id @default(uuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   lessonId  String
-  lesson    Lesson   @relation(fields: [lessonId], references: [id],onDelete: Cascade)
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   view      Boolean
   updatedAt DateTime @default(now())
   createdAt DateTime @default(now())
+
   @@map("lesson_views")
 }
-
 
 model Homework {
   id                 String               @id @default(uuid())
   task               String
   files              String[]
   lessonId           String
-  lesson             Lesson               @relation(fields: [lessonId], references: [id],onDelete: Cascade)
+  lesson             Lesson               @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   HomeworkSubmission HomeworkSubmission[]
   updatedAt          DateTime             @default(now())
   createdAt          DateTime             @default(now())
+
   @@map("homeworks")
 }
 
@@ -260,11 +275,12 @@ model HomeworkSubmission {
   reason     String
   status     HomeworkSubStatus @default(PENDING)
   homeworkId String
-  homeWork   Homework          @relation(fields: [homeworkId], references: [id],onDelete: Cascade)
+  homeWork   Homework          @relation(fields: [homeworkId], references: [id], onDelete: Cascade)
   userId     String
-  user       User              @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   updatedAt  DateTime          @default(now())
   createdAt  DateTime          @default(now())
+
   @@map("homework_submissions")
 }
 
@@ -277,32 +293,34 @@ model Exam {
   variantD      String
   answer        ExamAnswer
   lessonModulId String
-  lessonModule  LessonModul @relation(fields: [lessonModulId], references: [id],onDelete: Cascade)
+  lessonModule  LessonModul @relation(fields: [lessonModulId], references: [id], onDelete: Cascade)
   updatedAt     DateTime    @default(now())
   createdAt     DateTime    @default(now())
+
   @@map("exams")
 }
 
 model ExamResult {
   id            String      @id @default(uuid())
   lessonModulId String
-  lessonModule  LessonModul @relation(fields: [lessonModulId], references: [id],onDelete: Cascade)
+  lessonModule  LessonModul @relation(fields: [lessonModulId], references: [id], onDelete: Cascade)
   userId        String
-  user          User        @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   passed        Boolean
   corrects      Int
   wrongs        Int
   updatedAt     DateTime    @default(now())
   createdAt     DateTime    @default(now())
+
   @@map("exam_results")
 }
 
 model Question {
   id             String           @id @default(uuid())
   userId         String
-  user           User             @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   courseId       String
-  course         Course           @relation(fields: [courseId], references: [id],onDelete: Cascade)
+  course         Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
   text           String
   file           String[]
   read           Boolean
@@ -310,18 +328,30 @@ model Question {
   updatedAt      DateTime         @default(now())
   createdAt      DateTime         @default(now())
   QuestionAnswer QuestionAnswer[]
+
   @@map("questions")
 }
 
 model QuestionAnswer {
   id         String   @id @default(uuid())
   userId     String
-  user       User     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   questionId String
-  question   Question @relation(fields: [questionId], references: [id],onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   text       String
   file       String?
   updatedAt  DateTime @default(now())
   createdAt  DateTime @default(now())
+
   @@map("question_answers")
 }
+
+
+model Contact{
+  id BigInt @id @default(autoincrement())
+  phone String
+  message String
+  createdAt DateTime @default(now())
+  @@map("contact")
+}
+

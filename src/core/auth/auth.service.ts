@@ -22,16 +22,20 @@ export class AuthService {
   ) { }
 
   async create(data: CreateAuthDto) {
+   
     await checAlreadykExistsResurs(this.prisma,ModelsEnumInPrisma.USERS,"email",data.email)
+   
     const code = Math.floor(100000 + Math.random() * 900000);
     const ttl = Date.now() + (1000 * (60 * 5))
     const emailresult = await this.emilService.sendResedPasswordVerify(data.email,code,EmailCodeEnum.REGISTER)
+   
     this.cacheService.set(data.email, {
       fullname: data.fullName,
       email: data.email,
       password: data.password,
       code
     }, (1000 * (60 * 5)))
+   
     return {
       message: 'This action adds a new auth',
       data: { ...data, code, time: (ttl - (Date.now())) / (1000 * 60) }

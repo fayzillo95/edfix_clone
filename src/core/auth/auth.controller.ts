@@ -17,44 +17,27 @@ export class AuthController {
   create(@Body() createAuthDto: CreateAuthDto) {
     return this.authService.create(createAuthDto);
   }
-  @Public()
+
   @Post("verify")
   async verify(
     @Body() data: VerifyDto,
     @Res() res: Response
   ) {
     const { accessToken, refreshToken } = await this.authService.verifyCodeRegister(data)
-    res.cookie('accessToken', accessToken, {
-        httpOnly: true,
-        sameSite: 'none', // agar frontend boshqa domen bo‘lsa
-        // secure: true, // https bo‘lsa yoqiladi
-        })
-    res.cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        sameSite: 'none', // agar frontend boshqa domen bo‘lsa
-        // secure: true, // https bo‘lsa yoqiladi
-        })
+    res.cookie('accessToken', accessToken)
+    res.cookie('refreshToken', refreshToken)
     res.statusCode = 201
     res.send({ accessToken, refreshToken })
   }
 
-  @Public()
   @Post("login")
   async login(
     @Body() data: LoginDto,
     @Res() res: Response
   ) {
     const { accessToken, refreshToken } = await this.authService.login(data)
-    res.cookie('accessToken', accessToken, {
-          httpOnly: true,
-          sameSite: 'none', // agar frontend boshqa domen bo‘lsa
-          // secure: true, // https bo‘lsa yoqiladi
-        })
-    res.cookie('refreshToken', refreshToken, {
-          httpOnly: true,
-          sameSite: 'none', // agar frontend boshqa domen bo‘lsa
-          // secure: true, // https bo‘lsa yoqiladi
-    })
+    res.cookie('accessToken', accessToken)
+    res.cookie('refreshToken', refreshToken)
     res.statusCode = 201
     res.send({ accessToken, refreshToken })
   }

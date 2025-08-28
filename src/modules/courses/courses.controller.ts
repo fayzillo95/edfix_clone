@@ -18,6 +18,7 @@ import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { courseFileFields, fileStorages } from 'src/common/types/upload_types';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { courseApiBody } from 'src/common/types/api.body.types';
+import { Public } from 'src/global/decorators/auth.decorators';
 
 
 @Controller('courses')
@@ -47,12 +48,13 @@ export class CoursesController {
       throw new BadGatewayException("Invalid fields name files")
     }
   }
-
+  @Public()
   @Get("getall")
   findAll() {
     return this.coursesService.findAll();
   }
 
+  @Public()
   @Get('get-one/:id')
   findOne(@Param('id') id: string) {
     return this.coursesService.findOne(+id);

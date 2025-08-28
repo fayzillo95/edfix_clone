@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { CourseCategoriesService } from './course_categories.service';
 import { CreateCourseCategoryDto } from './dto/create-course_category.dto';
+import { Public } from 'src/global/decorators/auth.decorators';
 
 @Controller('course-categories')
 export class CourseCategoriesController {
@@ -21,11 +22,13 @@ export class CourseCategoriesController {
     return this.courseCategoriesService.create(data);
   }
 
+  @Public()
   @Get("get-all")
   findAll() {
     return this.courseCategoriesService.findAll();
   }
 
+  @Public()
   @Get('get-one/:id')
   findOne(@Param('id') id: string) {
     return this.courseCategoriesService.findOne(id);

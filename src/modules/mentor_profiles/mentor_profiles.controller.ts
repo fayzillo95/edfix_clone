@@ -10,6 +10,7 @@ import {
 import { MentorProfilesService } from './mentor_profiles.service';
 import { CreateMentorProfileDto } from './dto/create-mentor_profile.dto';
 import { UpdateMentorProfileDto } from './dto/update-mentor_profile.dto';
+import { Public } from 'src/global/decorators/auth.decorators';
 
 @Controller('mentor-profiles')
 export class MentorProfilesController {
@@ -20,11 +21,13 @@ export class MentorProfilesController {
     return this.mentorProfilesService.create(data);
   }
 
+  @Public()
   @Get("getall")
   findAll() {
     return this.mentorProfilesService.findAll();
   }
-
+  
+  @Public()
   @Get('get-one/:id')
   findOne(@Param('id') id: string) {
     return this.mentorProfilesService.findOne(id);

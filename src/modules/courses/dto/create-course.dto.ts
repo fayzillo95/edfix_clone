@@ -25,6 +25,15 @@ export class CreateCourseDto {
     @IsNumber()
     price: number
 
+    @Transform((e) => {
+        if(isNaN(+e.value)) return undefined
+        if(typeof e.value === "string"){
+            return e.value ==='' ? undefined : Number(e.value)
+        }
+    })
+    @IsNumber()
+    discount: number
+
     @IsString()
     @IsNotEmpty()
     @IsUUID()

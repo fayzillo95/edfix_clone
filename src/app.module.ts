@@ -20,6 +20,7 @@ import { QuestionAnswersModule } from './modules/question_answers/question_answe
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './global/guards/jwt.auth.guard';
 import { CoreModule } from './core/core.module';
+import { ContactModule } from './modules/contact/contact.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { CoreModule } from './core/core.module';
     ExamResultsModule,
     QuestionsModule,
     QuestionAnswersModule,
+    ContactModule,
   ],
   providers: [
     {
